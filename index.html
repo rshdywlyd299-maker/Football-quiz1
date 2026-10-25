@@ -1,1 +1,793 @@
 # Football-quiz1
+football.quiz1/
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>⚽ تحدي كرة القدم - اختبر معرفتك</title>
+
+<!-- SEO -->
+<meta name="description" content="اختبر معرفتك بكرة القدم مع 20 سؤالاً في 3 مستويات صعوبة. هل أنت خبير في الساحرة المستديرة؟">
+<meta name="keywords" content="كرة القدم, أسئلة, اختبار, quiz, football, كأس العالم, ميسي, رونالدو">
+<meta name="author" content="Football Quiz">
+<meta name="theme-color" content="#1abc9c">
+<meta property="og:title" content="⚽ تحدي كرة القدم">
+<meta property="og:description" content="هل أنت خبير في الساحرة المستديرة؟ اختبر نفسك الآن!">
+<meta property="og:type" content="website">
+
+<!-- Favicon (إيموجي) -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚽</text></svg>">
+
+<!-- PWA Manifest (مضمّن) -->
+<link rel="manifest" href='data:application/manifest+json,{"name":"تحدي كرة القدم","short_name":"كرة القدم","start_url":".","display":"standalone","background_color":"%231e3c72","theme_color":"%231abc9c","icons":[{"src":"data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E⚽%3C/text%3E%3C/svg%3E","sizes":"512x512","type":"image/svg+xml"}]}'>
+
+<!-- Apple touch icon -->
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚽</text></svg>">
+
+<style>
+/* ==================== إعادة تعيين ==================== */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; -webkit-tap-highlight-color: transparent; }
+
+:root {
+  --bg-gradient: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  --card-bg: #fff;
+  --text-color: #333;
+  --text-muted: #666;
+  --border-color: #e0e0e0;
+  --stats-bg: #f0f4f8;
+  --primary: #1e3c72;
+  --accent: #1abc9c;
+}
+
+body.dark {
+  --bg-gradient: linear-gradient(135deg, #000000, #1a1a2e, #16213e);
+  --card-bg: #1e1e2e;
+  --text-color: #eee;
+  --text-muted: #aaa;
+  --border-color: #444;
+  --stats-bg: #2a2a3e;
+  --primary: #1abc9c;
+}
+
+body {
+  background: var(--bg-gradient);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  transition: background 0.5s;
+  color: var(--text-color);
+}
+
+/* ==================== الحاوية ==================== */
+.container {
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 30px;
+  max-width: 550px;
+  width: 100%;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+  text-align: center;
+  transition: all 0.3s;
+}
+
+/* ==================== الشريط العلوي ==================== */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.theme-btn {
+  background: none;
+  border: 2px solid var(--border-color);
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  cursor: pointer;
+  font-size: 20px;
+  transition: all 0.3s;
+}
+
+.theme-btn:hover { transform: rotate(20deg) scale(1.1); }
+
+h1 { color: var(--primary); font-size: 22px; }
+
+/* ==================== شاشة البداية ==================== */
+.start-screen { padding: 20px 0; }
+
+.start-screen .icon {
+  font-size: 70px;
+  margin-bottom: 15px;
+  animation: bounce 2s infinite;
+  display: inline-block;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.start-text { color: var(--text-muted); margin-bottom: 20px; font-size: 15px; }
+
+.level-buttons {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.level-btn {
+  flex: 1;
+  padding: 15px 8px;
+  border: 2px solid var(--border-color);
+  background: var(--card-bg);
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: bold;
+  transition: all 0.3s;
+  color: var(--text-color);
+}
+
+.level-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.15); }
+.level-btn.easy { border-color: #28a745; color: #28a745; }
+.level-btn.medium { border-color: #ffc107; color: #e6a800; }
+.level-btn.hard { border-color: #dc3545; color: #dc3545; }
+.level-btn small { display: block; font-size: 11px; margin-top: 4px; opacity: 0.8; }
+
+/* ==================== الإحصائيات ==================== */
+.stats {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 18px;
+  background: var(--stats-bg);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.stat-box { display: flex; flex-direction: column; }
+.stat-box span:first-child { font-size: 11px; color: var(--text-muted); }
+.stat-box span:last-child { font-size: 18px; font-weight: bold; color: var(--primary); }
+
+/* ==================== المؤقت ==================== */
+.timer-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.timer-bar {
+  flex: 1;
+  height: 10px;
+  background: var(--border-color);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.timer-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #28a745, #1abc9c);
+  width: 100%;
+  transition: width 1s linear, background 0.3s;
+  border-radius: 10px;
+}
+
+.timer-fill.warning { background: linear-gradient(90deg, #ffc107, #ff9800); }
+.timer-fill.danger { background: linear-gradient(90deg, #dc3545, #c82333); }
+
+.timer-text {
+  font-size: 16px;
+  font-weight: bold;
+  min-width: 48px;
+  color: var(--primary);
+}
+
+/* ==================== التقدم ==================== */
+.progress {
+  height: 8px;
+  background: var(--border-color);
+  border-radius: 10px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #1abc9c, #16a085);
+  width: 0%;
+  transition: width 0.4s ease;
+  border-radius: 10px;
+}
+
+/* ==================== السؤال ==================== */
+.question {
+  font-size: 18px;
+  color: var(--text-color);
+  margin-bottom: 20px;
+  min-height: 60px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.answers { display: flex; flex-direction: column; gap: 10px; }
+
+.answer-btn {
+  padding: 15px;
+  border: 2px solid var(--border-color);
+  background: var(--card-bg);
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: all 0.25s;
+  font-weight: 500;
+  color: var(--text-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: right;
+}
+
+.answer-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  transform: translateX(-5px);
+}
+
+.answer-btn.correct { background: #d4edda; border-color: #28a745; color: #155724; }
+.answer-btn.wrong { background: #f8d7da; border-color: #dc3545; color: #721c24; }
+.answer-btn:disabled { cursor: not-allowed; }
+.answer-btn .feedback-icon { font-size: 18px; }
+
+/* ==================== زر التالي ==================== */
+.next-btn {
+  margin-top: 20px;
+  padding: 14px 40px;
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  display: none;
+  font-weight: bold;
+  transition: transform 0.2s;
+  width: 100%;
+}
+
+.next-btn:hover { transform: scale(1.02); }
+
+/* ==================== شاشة النتيجة ==================== */
+.result-screen { display: none; padding: 10px 0; }
+
+.trophy { font-size: 80px; animation: pop 0.6s ease; display: inline-block; }
+
+@keyframes pop {
+  0% { transform: scale(0); }
+  70% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.result-screen h2 { font-size: 22px; margin: 10px 0; color: var(--primary); }
+.score-big { font-size: 55px; color: var(--accent); font-weight: bold; margin: 10px 0; }
+.result-screen p { color: var(--text-muted); margin-bottom: 20px; font-size: 15px; }
+
+.best-score {
+  background: #fff3cd;
+  color: #856404;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+body.dark .best-score { background: #3a3a1e; color: #ffc107; }
+
+/* ==================== المراجعة ==================== */
+.review-section {
+  text-align: right;
+  margin: 20px 0;
+  max-height: 250px;
+  overflow-y: auto;
+  padding: 10px;
+  background: var(--stats-bg);
+  border-radius: 12px;
+}
+
+.review-section h4 { margin-bottom: 10px; color: var(--primary); }
+
+.review-item {
+  padding: 10px;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+
+.review-item:last-child { border-bottom: none; }
+.review-item.correct { border-right: 4px solid #28a745; }
+.review-item.wrong { border-right: 4px solid #dc3545; }
+.review-item .q-text { font-weight: bold; margin-bottom: 4px; color: var(--text-color); }
+.review-item .your-answer { color: #dc3545; font-size: 12px; }
+.review-item .correct-answer { color: #28a745; font-size: 12px; }
+
+/* ==================== أزرار النتيجة ==================== */
+.result-buttons { display: flex; gap: 10px; }
+
+.restart-btn, .share-btn {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: transform 0.2s;
+  color: #fff;
+}
+
+.restart-btn { background: linear-gradient(135deg, #1abc9c, #16a085); }
+.share-btn { background: linear-gradient(135deg, #667eea, #764ba2); }
+.restart-btn:hover, .share-btn:hover { transform: scale(1.03); }
+
+/* ==================== تأثيرات ==================== */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
+.shake { animation: shake 0.4s; }
+.hidden { display: none !important; }
+
+/* ==================== متجاوب ==================== */
+@media (max-width: 480px) {
+  .container { padding: 20px 15px; }
+  h1 { font-size: 18px; }
+  .question { font-size: 16px; }
+  .score-big { font-size: 45px; }
+  .level-btn { font-size: 11px; padding: 12px 5px; }
+  .trophy { font-size: 60px; }
+}
+</style>
+</head>
+<body>
+
+<div class="container" id="mainContainer">
+  <!-- الشريط العلوي -->
+  <div class="top-bar">
+    <button class="theme-btn" id="themeBtn" title="الوضع الليلي" aria-label="تبديل الوضع الليلي">🌙</button>
+    <h1>⚽ تحدي كرة القدم</h1>
+    <button class="theme-btn" id="soundBtn" title="الصوت" aria-label="تبديل الصوت">🔊</button>
+  </div>
+
+  <!-- شاشة البداية -->
+  <div class="start-screen" id="startScreen">
+    <div class="icon">🏆</div>
+    <p class="start-text">اختر مستوى الصعوبة وابدأ التحدي!</p>
+    <div class="level-buttons">
+      <button class="level-btn easy" data-level="easy">
+        🟢 سهل<small>15 ثانية</small>
+      </button>
+      <button class="level-btn medium" data-level="medium">
+        🟡 متوسط<small>10 ثوانٍ</small>
+      </button>
+      <button class="level-btn hard" data-level="hard">
+        🔴 صعب<small>6 ثوانٍ</small>
+      </button>
+    </div>
+    <div class="best-score" id="startBestScore" style="display:none;"></div>
+  </div>
+
+  <!-- شاشة الأسئلة -->
+  <div id="quizScreen" class="hidden">
+    <div class="stats">
+      <div class="stat-box"><span>السؤال</span><span id="questionCounter">1/10</span></div>
+      <div class="stat-box"><span>النقاط</span><span id="scoreDisplay">0</span></div>
+      <div class="stat-box"><span>المستوى</span><span id="levelDisplay">-</span></div>
+    </div>
+
+    <div class="timer-container">
+      <div class="timer-bar"><div class="timer-fill" id="timerFill"></div></div>
+      <div class="timer-text" id="timerText">⏱️ 10</div>
+    </div>
+
+    <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+
+    <div class="question" id="questionText"></div>
+    <div class="answers" id="answersContainer"></div>
+
+    <button class="next-btn" id="nextBtn">السؤال التالي ←</button>
+  </div>
+
+  <!-- شاشة النتيجة -->
+  <div class="result-screen" id="resultScreen">
+    <div class="trophy" id="trophyEmoji">🏆</div>
+    <h2 id="resultTitle">النتيجة النهائية</h2>
+    <div class="score-big" id="finalScore">0</div>
+    <div class="best-score" id="bestScoreMsg"></div>
+    <p id="resultMessage"></p>
+
+    <div class="review-section" id="reviewSection"></div>
+
+    <div class="result-buttons">
+      <button class="restart-btn" id="restartBtn">🔄 إعادة</button>
+      <button class="share-btn" id="shareBtn">📤 مشاركة</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ==================== بنك الأسئلة (20 سؤالاً) ====================
+const allQuestions = [
+  // 🟢 سهل (6)
+  { q: "من فاز بكأس العالم 2022؟", answers: ["الأرجنتين", "فرنسا", "البرازيل", "ألمانيا"], correct: 0, difficulty: "easy" },
+  { q: "كم عدد لاعبي فريق كرة القدم داخل الملعب؟", answers: ["10", "11", "12", "9"], correct: 1, difficulty: "easy" },
+  { q: "كم دقيقة تستغرق المباراة الرسمية؟", answers: ["80", "90", "100", "120"], correct: 1, difficulty: "easy" },
+  { q: "ما هي الدولة التي فازت بأول كأس عالم 1930؟", answers: ["البرازيل", "إيطاليا", "الأوروغواي", "ألمانيا"], correct: 2, difficulty: "easy" },
+  { q: "أي منتخب يُلقب بـ 'الديوك'؟", answers: ["إيطاليا", "إسبانيا", "فرنسا", "البرتغال"], correct: 2, difficulty: "easy" },
+  { q: "ما اسم الملعب الرئيسي لريال مدريد؟", answers: ["كامب نو", "سانتياغو برنابيو", "سان سيرو", "أليانز أرينا"], correct: 1, difficulty: "easy" },
+
+  // 🟡 متوسط (8)
+  { q: "من هو الهداف التاريخي لكأس العالم؟", answers: ["بيليه", "رونالدو", "ميروسلاف كلوزه", "ميسي"], correct: 2, difficulty: "medium" },
+  { q: "أي نادٍ يُلقب بـ 'البلوغرانا'؟", answers: ["ريال مدريد", "برشلونة", "بايرن ميونخ", "مانشستر"], correct: 1, difficulty: "medium" },
+  { q: "كم مرة فازت البرازيل بكأس العالم؟", answers: ["4", "5", "6", "3"], correct: 1, difficulty: "medium" },
+  { q: "من هو اللاعب الملقب بـ 'البرغوث'؟", answers: ["رونالدو", "نيمار", "ميسي", "مبابي"], correct: 2, difficulty: "medium" },
+  { q: "ما هي الدولة التي استضافت كأس العالم 2018؟", answers: ["قطر", "روسيا", "البرازيل", "جنوب أفريقيا"], correct: 1, difficulty: "medium" },
+  { q: "من فاز بالكرة الذهبية 2023؟", answers: ["ميسي", "هالاند", "مبابي", "بنزيمة"], correct: 0, difficulty: "medium" },
+  { q: "كم عدد البطاقات الحمراء التي تؤدي للطرد؟", answers: ["1", "2", "3", "4"], correct: 0, difficulty: "medium" },
+  { q: "من هو أكثر لاعب تتويجاً بدوري أبطال أوروبا؟", answers: ["ميسي", "رونالدو", "باتشيكو غينتو", "راموس"], correct: 2, difficulty: "medium" },
+
+  // 🔴 صعب (6)
+  { q: "من هو الهداف التاريخي لدوري أبطال أوروبا؟", answers: ["ميسي", "رونالدو", "بنزيمة", "ليفاندوفسكي"], correct: 1, difficulty: "hard" },
+  { q: "أي منتخب فاز بكأس العالم 1950 على أرضه وبين جمهوره؟", answers: ["البرازيل", "الأوروغواي", "إيطاليا", "ألمانيا"], correct: 1, difficulty: "hard" },
+  { q: "من هو اللاعب الوحيد الذي فاز بكأس العالم 3 مرات كلاعب؟", answers: ["مارادونا", "بيليه", "زيدان", "رونالدو"], correct: 1, difficulty: "hard" },
+  { q: "في أي عام تأسس الاتحاد الدولي لكرة القدم (فيفا)؟", answers: ["1900", "1904", "1912", "1920"], correct: 1, difficulty: "hard" },
+  { q: "من هو المدرب الأكثر تتويجاً بدوري أبطال أوروبا؟", answers: ["فيرغسون", "غوارديولا", "أنشيلوتي", "مورينيو"], correct: 2, difficulty: "hard" },
+  { q: "كم عدد لاعبي الاحتياط المسموح بهم في كأس العالم 2022؟", answers: ["12", "15", "23", "26"], correct: 3, difficulty: "hard" }
+];
+
+// ==================== المتغيرات العامة ====================
+let currentQuestions = [];
+let currentIndex = 0;
+let score = 0;
+let answered = false;
+let currentLevel = 'easy';
+let timerInterval = null;
+let timeLeft = 0;
+let timePerQuestion = 15;
+let soundEnabled = true;
+let userAnswers = [];
+let bestScores = JSON.parse(localStorage.getItem('bestScores') || '{}');
+
+// ==================== اختصار DOM ====================
+const $ = id => document.getElementById(id);
+const startScreen = $('startScreen');
+const quizScreen = $('quizScreen');
+const resultScreen = $('resultScreen');
+const answersContainer = $('answersContainer');
+const nextBtn = $('nextBtn');
+const timerFill = $('timerFill');
+const timerText = $('timerText');
+const mainContainer = $('mainContainer');
+
+// ==================== الأصوات ====================
+let audioContext;
+function playSound(type) {
+  if (!soundEnabled) return;
+  try {
+    if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+    osc.connect(gain);
+    gain.connect(audioContext.destination);
+
+    const now = audioContext.currentTime;
+    if (type === 'correct') {
+      osc.frequency.setValueAtTime(523, now);
+      osc.frequency.setValueAtTime(659, now + 0.1);
+      osc.frequency.setValueAtTime(784, now + 0.2);
+    } else if (type === 'wrong') {
+      osc.frequency.setValueAtTime(300, now);
+      osc.frequency.setValueAtTime(200, now + 0.15);
+    } else if (type === 'tick') {
+      osc.frequency.setValueAtTime(800, now);
+    }
+
+    gain.gain.setValueAtTime(0.1, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+    osc.start(now);
+    osc.stop(now + 0.3);
+  } catch (e) {}
+}
+
+// ==================== الوضع الليلي ====================
+function initTheme() {
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark') {
+    document.body.classList.add('dark');
+    $('themeBtn').textContent = '☀️';
+  }
+}
+
+$('themeBtn').onclick = () => {
+  document.body.classList.toggle('dark');
+  const isDark = document.body.classList.contains('dark');
+  $('themeBtn').textContent = isDark ? '☀️' : '🌙';
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+};
+
+// ==================== الصوت ====================
+function initSound() {
+  if (localStorage.getItem('sound') === 'off') {
+    soundEnabled = false;
+    $('soundBtn').textContent = '🔇';
+  }
+}
+
+$('soundBtn').onclick = () => {
+  soundEnabled = !soundEnabled;
+  $('soundBtn').textContent = soundEnabled ? '🔊' : '🔇';
+  localStorage.setItem('sound', soundEnabled ? 'on' : 'off');
+};
+
+// ==================== اختيار المستوى ====================
+document.querySelectorAll('.level-btn').forEach(btn => {
+  btn.onclick = () => {
+    currentLevel = btn.dataset.level;
+    startQuiz();
+  };
+});
+
+// ==================== بدء الاختبار ====================
+function startQuiz() {
+  let filtered = allQuestions.filter(q => q.difficulty === currentLevel);
+  filtered = filtered.sort(() => Math.random() - 0.5);
+
+  currentQuestions = filtered.map(q => {
+    const shuffled = q.answers.map((a, i) => ({ text: a, isCorrect: i === q.correct }));
+    shuffled.sort(() => Math.random() - 0.5);
+    return {
+      ...q,
+      answers: shuffled.map(a => a.text),
+      correct: shuffled.findIndex(a => a.isCorrect)
+    };
+  });
+
+  if (currentLevel === 'easy') timePerQuestion = 15;
+  else if (currentLevel === 'medium') timePerQuestion = 10;
+  else timePerQuestion = 6;
+
+  currentIndex = 0;
+  score = 0;
+  userAnswers = [];
+
+  startScreen.classList.add('hidden');
+  resultScreen.style.display = 'none';
+  quizScreen.classList.remove('hidden');
+  $('levelDisplay').textContent = currentLevel === 'easy' ? '🟢' : currentLevel === 'medium' ? '🟡' : '🔴';
+
+  loadQuestion();
+}
+
+// ==================== تحميل السؤال ====================
+function loadQuestion() {
+  answered = false;
+  nextBtn.style.display = 'none';
+  const q = currentQuestions[currentIndex];
+
+  $('questionCounter').textContent = `${currentIndex + 1}/${currentQuestions.length}`;
+  $('scoreDisplay').textContent = score;
+  $('progressBar').style.width = `${(currentIndex / currentQuestions.length) * 100}%`;
+  $('questionText').textContent = q.q;
+
+  answersContainer.innerHTML = '';
+  q.answers.forEach((ans, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'answer-btn';
+    btn.innerHTML = `<span>${ans}</span><span class="feedback-icon"></span>`;
+    btn.onclick = () => selectAnswer(i, btn);
+    answersContainer.appendChild(btn);
+  });
+
+  startTimer();
+}
+
+// ==================== المؤقت ====================
+function startTimer() {
+  clearInterval(timerInterval);
+  timeLeft = timePerQuestion;
+  updateTimerUI();
+
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimerUI();
+    if (timeLeft <= 3 && timeLeft > 0) playSound('tick');
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      timeOut();
+    }
+  }, 1000);
+}
+
+function updateTimerUI() {
+  const pct = (timeLeft / timePerQuestion) * 100;
+  timerFill.style.width = pct + '%';
+  timerText.textContent = `⏱️ ${timeLeft}`;
+  timerFill.classList.remove('warning', 'danger');
+  if (pct <= 33) timerFill.classList.add('danger');
+  else if (pct <= 66) timerFill.classList.add('warning');
+}
+
+function timeOut() {
+  if (answered) return;
+  answered = true;
+
+  userAnswers.push({
+    question: currentQuestions[currentIndex].q,
+    userAnswer: 'انتهى الوقت',
+    correctAnswer: currentQuestions[currentIndex].answers[currentQuestions[currentIndex].correct],
+    isCorrect: false
+  });
+
+  answersContainer.querySelectorAll('.answer-btn').forEach((b, i) => {
+    b.disabled = true;
+    if (i === currentQuestions[currentIndex].correct) {
+      b.classList.add('correct');
+      b.querySelector('.feedback-icon').textContent = '✓';
+    }
+  });
+
+  playSound('wrong');
+  mainContainer.classList.add('shake');
+  setTimeout(() => mainContainer.classList.remove('shake'), 400);
+
+  nextBtn.style.display = 'block';
+  nextBtn.textContent = currentIndex === currentQuestions.length - 1 ? 'عرض النتيجة 🏁' : 'السؤال التالي ←';
+}
+
+// ==================== اختيار إجابة ====================
+function selectAnswer(index, btn) {
+  if (answered) return;
+  answered = true;
+  clearInterval(timerInterval);
+
+  const q = currentQuestions[currentIndex];
+  const isCorrect = index === q.correct;
+
+  answersContainer.querySelectorAll('.answer-btn').forEach((b, i) => {
+    b.disabled = true;
+    if (i === q.correct) {
+      b.classList.add('correct');
+      b.querySelector('.feedback-icon').textContent = '✓';
+    } else if (i === index) {
+      b.classList.add('wrong');
+      b.querySelector('.feedback-icon').textContent = '✗';
+    }
+  });
+
+  if (isCorrect) {
+    const speedBonus = Math.floor((timeLeft / timePerQuestion) * 5);
+    score += 10 + speedBonus;
+    playSound('correct');
+  } else {
+    playSound('wrong');
+    mainContainer.classList.add('shake');
+    setTimeout(() => mainContainer.classList.remove('shake'), 400);
+  }
+
+  userAnswers.push({
+    question: q.q,
+    userAnswer: q.answers[index],
+    correctAnswer: q.answers[q.correct],
+    isCorrect
+  });
+
+  $('scoreDisplay').textContent = score;
+  nextBtn.style.display = 'block';
+  nextBtn.textContent = currentIndex === currentQuestions.length - 1 ? 'عرض النتيجة 🏁' : 'السؤال التالي ←';
+}
+
+// ==================== التالي ====================
+nextBtn.onclick = () => {
+  currentIndex++;
+  if (currentIndex < currentQuestions.length) loadQuestion();
+  else showResult();
+};
+
+// ==================== عرض النتيجة ====================
+function showResult() {
+  clearInterval(timerInterval);
+  quizScreen.classList.add('hidden');
+  resultScreen.style.display = 'block';
+
+  const maxScore = currentQuestions.length * 15;
+  const pct = score / maxScore;
+
+  $('finalScore').textContent = `${score} نقطة`;
+
+  if (pct >= 0.85) { $('trophyEmoji').textContent = '🏆'; $('resultTitle').textContent = 'أسطورة كرة القدم!'; }
+  else if (pct >= 0.6) { $('trophyEmoji').textContent = '🥈'; $('resultTitle').textContent = 'خبير كروي!'; }
+  else if (pct >= 0.35) { $('trophyEmoji').textContent = '🥉'; $('resultTitle').textContent = 'لاعب واعد!'; }
+  else { $('trophyEmoji').textContent = '⚽'; $('resultTitle').textContent = 'مبتدئ طموح!'; }
+
+  if (!bestScores[currentLevel] || score > bestScores[currentLevel]) {
+    bestScores[currentLevel] = score;
+    localStorage.setItem('bestScores', JSON.stringify(bestScores));
+    $('bestScoreMsg').textContent = '🎉 رقم قياسي جديد!';
+  } else {
+    $('bestScoreMsg').textContent = `🏅 أفضل نتيجة: ${bestScores[currentLevel]} نقطة`;
+  }
+
+  const correctCount = userAnswers.filter(a => a.isCorrect).length;
+  $('resultMessage').textContent = `أجبت بشكل صحيح على ${correctCount} من ${currentQuestions.length} سؤالاً`;
+
+  const reviewSection = $('reviewSection');
+  reviewSection.innerHTML = '<h4>📋 مراجعة الإجابات</h4>';
+  userAnswers.forEach((a, i) => {
+    const div = document.createElement('div');
+    div.className = `review-item ${a.isCorrect ? 'correct' : 'wrong'}`;
+    div.innerHTML = `
+      <div class="q-text">${i + 1}. ${a.question}</div>
+      ${a.isCorrect
+        ? `<div class="correct-answer">✓ ${a.correctAnswer}</div>`
+        : `<div class="your-answer">✗ إجابتك: ${a.userAnswer}</div>
+           <div class="correct-answer">✓ الصحيحة: ${a.correctAnswer}</div>`}
+    `;
+    reviewSection.appendChild(div);
+  });
+}
+
+// ==================== إعادة ====================
+$('restartBtn').onclick = () => {
+  resultScreen.style.display = 'none';
+  startScreen.classList.remove('hidden');
+  updateBestScoreDisplay();
+};
+
+// ==================== مشاركة ====================
+$('shareBtn').onclick = () => {
+  const levelName = currentLevel === 'easy' ? 'سهل' : currentLevel === 'medium' ? 'متوسط' : 'صعب';
+  const text = `⚽ حصلت على ${score} نقطة في تحدي كرة القدم (${levelName})! هل يمكنك التغلب علي؟`;
+
+  if (navigator.share) {
+    navigator.share({ title: 'تحدي كرة القدم', text }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('✅ تم نسخ النتيجة! شاركها مع أصدقائك');
+    }).catch(() => {
+      alert(text);
+    });
+  }
+};
+
+// ==================== أفضل نتيجة ====================
+function updateBestScoreDisplay() {
+  const el = $('startBestScore');
+  if (Object.keys(bestScores).length > 0) {
+    el.style.display = 'block';
+    el.innerHTML = `🏅 أفضل نتائجك:
+      سهل: ${bestScores.easy || 0} |
+      متوسط: ${bestScores.medium || 0} |
+      صعب: ${bestScores.hard || 0}`;
+  } else {
+    el.style.display = 'none';
+  }
+}
+
+// ==================== تهيئة ====================
+initTheme();
+initSound();
+updateBestScoreDisplay();
+
+// تسجيل Service Worker تلقائي (يعمل فقط عند استضافة الموقع)
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    // ملاحظة: يعمل فقط بعد رفع الموقع على استضافة حقيقية
+  });
+}
+</script>
+</body>
+  </html>
